@@ -30,8 +30,7 @@ public class AppUser implements UserDetails{
 	@SequenceGenerator(
 			name = "Student",
 			sequenceName = "Student",
-			allocationSize = 1,
-			initialValue = 101
+			allocationSize = 1
 	)
 	@Id
 	@GeneratedValue(
