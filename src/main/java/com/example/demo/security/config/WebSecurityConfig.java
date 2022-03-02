@@ -20,15 +20,19 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
-	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-	@Autowired
 	private AppUserService userService;
 	
+	public WebSecurityConfig(BCryptPasswordEncoder bCryptPasswordEncoder, AppUserService userService) {
+		super();
+		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+		this.userService = userService;
+	}
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().disable()
+		http.csrf().disable()
 			.authorizeRequests()
 			.antMatchers("/api/v*/register/**").permitAll()
 			.anyRequest().authenticated()
