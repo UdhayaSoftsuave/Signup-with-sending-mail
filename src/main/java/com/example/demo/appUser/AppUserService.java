@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.MailSender.MailSender;
 import com.example.demo.Registration.token.ConfirmationToken;
 import com.example.demo.Registration.token.ConfirmationTokenService;
 
@@ -26,6 +27,9 @@ public class AppUserService implements UserDetailsService{
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@Autowired
+	private MailSender mailSender;
+	
+	@Autowired
 	private ConfirmationTokenService confirmationTokenService;
 	
 	@Override
@@ -36,9 +40,9 @@ public class AppUserService implements UserDetailsService{
 
 	public String signupUser(AppUser appUser) {
 		Boolean isExist = userRepository.existsByEmail(appUser.getUsername());
-		if (isExist) {
-			throw new IllegalStateException("Email already Exist");
-		}
+//		if (isExist) {
+//			throw new IllegalStateException("Email already Exist");
+//		}
 		appUser.setPassword(bCryptPasswordEncoder.encode(appUser.getPassword()));
 		AppUser  result =userRepository.save(appUser);
 		
@@ -48,7 +52,17 @@ public class AppUserService implements UserDetailsService{
 		
 		String tokenResult = confirmationTokenService.saveToken(confirmationToken);
 		
+		mailSender.send(result.getUsername(), sendMailHtml("http://localhost:8080/api/v1/register/confirm/" + token));
+		
 		return tokenResult;
+	}
+	
+	private static String sendMailHtml(String url) {
+		
+		String Message =String.format("<a href=%s>Click Here to Confirm</a>",url);
+		
+		return Message;
+		
 	}
 
 }
