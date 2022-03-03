@@ -1,6 +1,8 @@
 package com.example.demo.Registration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,13 @@ public class RegistrationController {
 		return registrationService.register(registrationRequest);
 		
 	}
+	@GetMapping("/confirm/{token}")
+	public String confirm(@PathVariable String token) {
+		return registrationService.confirmToken(token);
+		
+	}
+	
+	
 	
 
 }

@@ -100,5 +100,8 @@ public class AppUser implements UserDetails{
 	public boolean isEnabled() {
 		return enabled;
 	}
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
 
 }
